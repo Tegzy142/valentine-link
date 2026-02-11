@@ -39,67 +39,41 @@ export default function Create() {
   };
 
   return (
-    <main
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background: "#fff0f6",
-        padding: 20,
-      }}
-    >
-      <div
-        style={{
-          width: "100%",
-          maxWidth: 420,
-          background: "white",
-          padding: 30,
-          borderRadius: 16,
-          boxShadow: "0 10px 30px rgba(0,0,0,0.1)",
-        }}
-      >
-        <h2 style={{ textAlign: "center", marginBottom: 20 }}>
-          Create Your Valentine 💌
-        </h2>
+    <main style={styles.page}>
+      <div style={styles.card}>
+        <h1 style={styles.title}>💌 Create a Valentine</h1>
+        <p style={styles.subtitle}>
+          Send a personal message that comes from the heart
+        </p>
 
         <input
           placeholder="Your name"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          style={{ width: "100%", padding: 10, marginBottom: 10 }}
+          style={styles.input}
         />
 
         <textarea
-          placeholder="Your message"
+          placeholder="Write your message..."
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          style={{ width: "100%", padding: 10, marginBottom: 10 }}
+          style={styles.textarea}
         />
 
-        <p style={{ fontSize: 14 }}>Add a short video (optional)</p>
-
-        {/* ✅ CLOUDINARY VIDEO UPLOAD */}
-        <VideoUpload onUpload={setVideoUrl} />
-
-        {videoUrl && (
-          <p style={{ fontSize: 12, color: "green", marginTop: 6 }}>
-            Video uploaded successfully ✓
-          </p>
-        )}
+        <div style={styles.uploadBox}>
+          <p style={styles.uploadText}>Optional: add a short video ❤️</p>
+          <VideoUpload onUpload={setVideoUrl} />
+          {videoUrl && (
+            <p style={styles.success}>Video uploaded successfully ✓</p>
+          )}
+        </div>
 
         <button
           onClick={submit}
           disabled={loading}
           style={{
-            width: "100%",
-            padding: 12,
-            borderRadius: 12,
-            border: "none",
-            background: "#ff4d6d",
-            color: "white",
-            cursor: "pointer",
-            marginTop: 20,
+            ...styles.button,
+            opacity: loading ? 0.7 : 1,
           }}
         >
           {loading ? "Creating..." : "Generate Valentine Link"}
@@ -108,6 +82,206 @@ export default function Create() {
     </main>
   );
 }
+
+/* ================= STYLES ================= */
+
+const styles = {
+  page: {
+    minHeight: "100vh",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    background: "linear-gradient(135deg, #fff0f6, #ffe3ec)",
+    padding: 20,
+  },
+
+  card: {
+    width: "100%",
+    maxWidth: 420,
+    background: "white",
+    padding: 32,
+    borderRadius: 20,
+    boxShadow: "0 20px 50px rgba(255,77,109,0.25)",
+  },
+
+  title: {
+    textAlign: "center",
+    marginBottom: 6,
+    fontSize: 26,
+  },
+
+  subtitle: {
+    textAlign: "center",
+    fontSize: 14,
+    opacity: 0.7,
+    marginBottom: 24,
+  },
+
+  input: {
+    width: "100%",
+    padding: 14,
+    marginBottom: 12,
+    borderRadius: 12,
+    border: "1px solid #ddd",
+    fontSize: 15,
+  },
+
+  textarea: {
+    width: "100%",
+    padding: 14,
+    marginBottom: 16,
+    borderRadius: 12,
+    border: "1px solid #ddd",
+    fontSize: 15,
+    minHeight: 100,
+    resize: "vertical",
+  },
+
+  uploadBox: {
+    background: "#fff5f8",
+    padding: 14,
+    borderRadius: 14,
+    marginBottom: 20,
+  },
+
+  uploadText: {
+    fontSize: 13,
+    marginBottom: 8,
+    opacity: 0.8,
+  },
+
+  success: {
+    fontSize: 12,
+    color: "green",
+    marginTop: 6,
+  },
+
+  button: {
+    width: "100%",
+    padding: 14,
+    borderRadius: 14,
+    border: "none",
+    background: "linear-gradient(135deg, #ff4d6d, #ff758f)",
+    color: "white",
+    fontSize: 16,
+    fontWeight: 600,
+    cursor: "pointer",
+  },
+};
+
+
+
+
+// "use client";
+
+// import { useState } from "react";
+// import { supabase } from "@/lib/supabase";
+// import { v4 as uuid } from "uuid";
+// import VideoUpload from "@/components/VideoUpload";
+
+// export default function Create() {
+//   const [name, setName] = useState("");
+//   const [message, setMessage] = useState("");
+//   const [videoUrl, setVideoUrl] = useState("");
+//   const [loading, setLoading] = useState(false);
+
+//   const submit = async () => {
+//     if (!name || !message) {
+//       alert("Please fill all fields");
+//       return;
+//     }
+
+//     setLoading(true);
+//     const slug = uuid().slice(0, 8);
+
+//     const { error } = await supabase.from("valentines").insert({
+//       slug,
+//       sender_name: name,
+//       message,
+//       images: [],
+//       video_url: videoUrl || null,
+//     });
+
+//     if (error) {
+//       alert("Something went wrong");
+//       console.error(error);
+//       setLoading(false);
+//       return;
+//     }
+
+//     window.location.href = `/v/${slug}`;
+//   };
+
+//   return (
+//     <main
+//       style={{
+//         minHeight: "100vh",
+//         display: "flex",
+//         alignItems: "center",
+//         justifyContent: "center",
+//         background: "#fff0f6",
+//         padding: 20,
+//       }}
+//     >
+//       <div
+//         style={{
+//           width: "100%",
+//           maxWidth: 420,
+//           background: "white",
+//           padding: 30,
+//           borderRadius: 16,
+//           boxShadow: "0 10px 30px rgba(0,0,0,0.1)",
+//         }}
+//       >
+//         <h2 style={{ textAlign: "center", marginBottom: 20 }}>
+//           Create Your Valentine 💌
+//         </h2>
+
+//         <input
+//           placeholder="Your name"
+//           value={name}
+//           onChange={(e) => setName(e.target.value)}
+//           style={{ width: "100%", padding: 10, marginBottom: 10 }}
+//         />
+
+//         <textarea
+//           placeholder="Your message"
+//           value={message}
+//           onChange={(e) => setMessage(e.target.value)}
+//           style={{ width: "100%", padding: 10, marginBottom: 10 }}
+//         />
+
+//         <p style={{ fontSize: 14 }}>Add a short video (optional)</p>
+
+//         {/* ✅ CLOUDINARY VIDEO UPLOAD */}
+//         <VideoUpload onUpload={setVideoUrl} />
+
+//         {videoUrl && (
+//           <p style={{ fontSize: 12, color: "green", marginTop: 6 }}>
+//             Video uploaded successfully ✓
+//           </p>
+//         )}
+
+//         <button
+//           onClick={submit}
+//           disabled={loading}
+//           style={{
+//             width: "100%",
+//             padding: 12,
+//             borderRadius: 12,
+//             border: "none",
+//             background: "#ff4d6d",
+//             color: "white",
+//             cursor: "pointer",
+//             marginTop: 20,
+//           }}
+//         >
+//           {loading ? "Creating..." : "Generate Valentine Link"}
+//         </button>
+//       </div>
+//     </main>
+//   );
+// }
 
 
 
