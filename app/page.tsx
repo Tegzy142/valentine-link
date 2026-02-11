@@ -26,7 +26,7 @@ export default function Home() {
 
 /* ================= STYLES ================= */
 
-const styles = {
+const styles: { [key: string]: React.CSSProperties } = {
   page: {
     minHeight: "100vh",
     display: "flex",
